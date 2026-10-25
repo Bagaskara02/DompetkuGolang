@@ -20,16 +20,24 @@
 
 ## 2. Kebutuhan Aplikasi
 
-Tuliskan fitur yang ingin dibuat.
+Fitur utama aplikasi:
 
 1. `[Fitur utama 1]`
 2. `[Fitur utama 2]`
 3. `[Fitur utama 3]`
 4. `[Fitur tambahan, jika ada]`
 
+**Halaman aplikasi:**
+
+- Login
+- Register
+- Main Page — My Notes
+
+Pada Main Page, pengguna dapat melihat daftar catatan, membuat catatan, mengedit, menghapus, dan logout.
+
 ## 3. Pilihan Teknologi
 
-Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuhan aplikasi.
+Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuhan aplikasi. isiskan [x] hanya satu saja
 
 ### A. Backend Framework
 
@@ -47,6 +55,8 @@ Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuha
 
 **Pilihan saya:** `[Isi nomor pilihan]`
 
+**Ketentuan:** `[Isi ketentuannya contoh memakai GORM atau menggunakan  SQL manual dengan library pgx]`
+
 ### C. Database
 
 - [ ] 1. PostgreSQL
@@ -57,7 +67,7 @@ Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuha
 
 ### D. Frontend
 
-- [ ] 1. HTML, CSS, JavaScript murni
+- [x] 1. HTML, CSS, JavaScript murni
 - [ ] 2. React
 - [ ] 3. Vue
 
@@ -65,59 +75,88 @@ Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuha
 
 ### E. Sistem Autentikasi
 
-- [ ] 1. Tidak membutuhkan autentikasi
-- [ ] 2. Session
-- [ ] 3. JWT
+- [ ] 1. Session
+- [x] 2. JWT
 
 **Pilihan saya:** `[Isi nomor pilihan]`
+
+**Ketentuan:** `[Isi ketentuan untuk Auth. contoh: Gunakan session berbasis server untuk mengelola status login pengguna atau Gunakan JWT berbasis server untuk mengelola status login pengguna.]`
 
 ### F. Penyimpanan Sesi atau Token
 
 - [ ] 1. Cookie
-- [ ] 2. localStorage
+- [x] 2. localStorage
 - [ ] 3. Tidak diperlukan
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** 1
+
+**Ketentuan:** Simpan ID session dalam localStorage dengan pengaturan keamanan yang sesuai.
 
 ### G. API
 
-- [ ] 1. REST API
+- [x] 1. REST API
 - [ ] 2. Tidak membutuhkan API terpisah
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** 1
+
+**Ketentuan:** Backend menyediakan REST API untuk autentikasi dan pengelolaan catatan. Frontend mengakses API menggunakan `fetch()`.
 
 ### H. Version Control
 
-- [ ] 1. Git
+- [x] 1. Git
 - [ ] 2. Tidak menggunakan Git
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** 1
 
 ## 4. Detail Autentikasi
 
-Isi bagian ini jika aplikasi membutuhkan autentikasi.
+**Registrasi akun:** Ya
 
-**Registrasi akun:** `[Ya / Tidak]`
+**Login:** Ya
 
-**Login:** `[Ya / Tidak]`
+**Logout:** Ya
 
-**Logout:** `[Ya / Tidak]`
-
-**Role pengguna:**
-`[Contoh: Admin dan User / Tidak ada]`
+**Role pengguna:** User saja. Tidak ada role Admin.
 
 **Aturan akses:**
-`[Contoh: User hanya dapat melihat dan mengubah data miliknya sendiri]`
 
-## 5. Batasan Pengembangan
+1. Pengguna harus login untuk mengakses catatan.
+2. Pengguna yang belum login hanya dapat mengakses halaman Login dan Register.
+3. Setiap catatan harus memiliki `user_id` sebagai pemiliknya.
+4. Backend harus memeriksa kepemilikan catatan pada setiap operasi melihat detail, mengedit, dan menghapus.
+5. Pengguna tidak boleh melihat atau mengubah catatan pengguna lain, termasuk dengan mengubah ID pada URL atau request API.
+6. Password harus disimpan dalam bentuk hash menggunakan algoritma yang sesuai, bukan sebagai teks biasa.
+7. Setelah logout, session harus dinonaktifkan dan cookie session dibersihkan.
 
-Pilih aturan yang ingin diterapkan.
+## 5. Konfigurasi Environment dan Database
+
+**Ketentuan wajib:**
+
+1. Semua konfigurasi aplikasi yang sensitif harus menggunakan environment variable.
+2. Gunakan file `.env` untuk konfigurasi saat pengembangan lokal.
+3. Sediakan file `.env.example` sebagai contoh konfigurasi tanpa kredensial asli.
+4. File `.env` tidak boleh dimasukkan ke Git.
+5. URL atau connection string PostgreSQL harus dibaca dari environment variable bernama `DATABASE_URL`.
+6. Jangan menulis URL database, username, password database, session secret, atau kredensial lainnya secara langsung di kode.
+7. Aplikasi harus memberikan pesan error yang jelas jika konfigurasi wajib belum tersedia, tanpa membocorkan password atau rahasia lainnya.
+
+Contoh `.env.example`:
+
+```dotenv
+APP_PORT=8080
+DATABASE_URL=postgres://username:password@localhost:5432/personal_notes?sslmode=disable
+SESSION_SECRET=replace-with-a-random-secret
+```
+
+**Catatan:** Nilai di atas hanya contoh untuk pengembangan lokal. Gunakan kredensial dan session secret milik sendiri pada file `.env`. Untuk database produksi, gunakan konfigurasi SSL sesuai persyaratan penyedia database.
+
+## 6. Batasan Pengembangan (BOLEH DIUBAH SESUAI KEINGINAN PESERTA PELATIHAN)
 
 - [ ] Struktur folder sederhana.
 - [ ] Kode mudah dipahami pemula.
 - [ ] Tidak menambahkan teknologi di luar pilihan tanpa persetujuan.
-- [ ] Memisahkan tampilan dan logika backend.
-- [ ] Menggunakan environment variable untuk konfigurasi rahasia.
+- [ ] Memisahkan frontend dan backend.
+- [ ] Menggunakan environment variable untuk konfigurasi.
 - [ ] Membuat pengujian dasar.
 - [ ] Menjelaskan kode dan perubahan yang dibuat AI.
 
@@ -131,31 +170,34 @@ Tuliskan fitur yang tidak perlu dibuat agar ruang lingkup proyek tetap jelas.
 - `[Fitur yang tidak dibutuhkan 1]`
 - `[Fitur yang tidak dibutuhkan 2]`
 
-## 7. Pemeriksaan Sebelum Vibe Coding
+## 7. Pemeriksaan Sebelum Vibe Coding (BOLEH DIUBAH SESUAI KEINGINAN PESERTA PELATIHAN)
 
 - [ ] Nama dan tujuan aplikasi sudah jelas.
 - [ ] Fitur utama sudah ditentukan.
 - [ ] Pilihan teknologi sudah diisi.
-- [ ] Kebutuhan autentikasi sudah ditentukan jika diperlukan.
+- [ ] Kebutuhan autentikasi sudah ditentukan.
 - [ ] Batasan proyek sudah ditentukan.
+- [ ] Penggunaan `.env` dan `DATABASE_URL` sudah ditentukan.
 
-**Status spesifikasi:** `[Belum siap / Siap untuk vibe coding]`
+**Status spesifikasi:** Siap untuk diperiksa dan disetujui sebelum implementasi.
 
 ---
 
 ## 8. Instruksi untuk Agy
 
-Setelah dokumen ini diisi, berikan instruksi berikut kepada Agy:
+Baca dan pahami file `docs/prompts/00-project-spec.md` secara lengkap.
 
-Baca dan pahami file `docs/prompts/00-project-spec.md`.
-
-Gunakan pilihan teknologi dan kebutuhan yang sudah ditentukan sebagai acuan utama.
+Gunakan spesifikasi ini sebagai acuan utama pengembangan.
 
 1. Periksa apakah spesifikasi sudah lengkap dan konsisten.
 2. Tanyakan jika ada informasi penting yang belum jelas.
-3. Usulkan struktur folder yang sederhana sesuai pilihan teknologi.
-4. Jangan langsung membuat seluruh aplikasi sekaligus.
-5. Tunggu persetujuan saya sebelum mulai implementasi.
-6. Implementasikan aplikasi secara bertahap dan jelaskan cara menguji setiap bagian.
-
-Jangan mengganti teknologi yang telah dipilih tanpa menjelaskan alasannya dan meminta persetujuan saya.
+3. Usulkan struktur folder sederhana sesuai teknologi yang dipilih.
+4. Jelaskan fungsi folder dan file utama.
+5. Jangan langsung membuat seluruh aplikasi sekaligus.
+6. Jangan membuat, mengubah, atau menghapus file sebelum saya menyetujui usulan struktur folder.
+7. Implementasikan aplikasi secara bertahap setelah mendapat persetujuan.
+8. Jelaskan perubahan kode dan cara menguji setiap tahap.
+9. Jangan mengganti teknologi atau menambahkan dependensi tanpa menjelaskan alasannya dan meminta persetujuan saya.
+10. Pastikan `DATABASE_URL` dibaca dari environment variable dan tidak pernah di-hardcode.
+11. Pastikan `.env` masuk ke `.gitignore`, sementara `.env.example` boleh disimpan di Git.
+12. Jangan menampilkan nilai rahasia dari `.env` pada log atau respons API.

@@ -19,7 +19,11 @@ func LoadConfig() (*Config, error) {
 	// Membaca file .env jika ada (tidak wajib ada jika dijalankan di container/production)
 	_ = godotenv.Load()
 
-	port := os.Getenv("APP_PORT")
+	// Mendukung PORT (standar cloud PaaS seperti Hostless/Render/Railway) dan APP_PORT (.env lokal)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = os.Getenv("APP_PORT")
+	}
 	if port == "" {
 		port = "8080"
 	}

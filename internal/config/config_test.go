@@ -6,6 +6,7 @@ import (
 )
 
 func TestLoadConfigSuccess(t *testing.T) {
+	os.Unsetenv("PORT")
 	os.Setenv("APP_PORT", "9090")
 	os.Setenv("DATABASE_URL", "postgres://test:test@localhost:5432/testdb")
 	os.Setenv("JWT_SECRET", "super-secret-key")
@@ -28,6 +29,26 @@ func TestLoadConfigSuccess(t *testing.T) {
 	}
 	if cfg.JWTSecret != "super-secret-key" {
 		t.Errorf("Expected JWT secret, got %s", cfg.JWTSecret)
+	}
+}
+
+func TestLoadConfigWithCloudPort(t *testing.T) {
+	os.Setenv("PORT", "3000")
+	os.Setenv("DATABASE_URL", "postgres://test:test@localhost:5432/testdb")
+	os.Setenv("JWT_SECRET", "super-secret-key")
+	defer func() {
+		os.Unsetenv("PORT")
+		os.Unsetenv("DATABASE_URL")
+		os.Unsetenv("JWT_SECRET")
+	}()
+
+	cfg, err := LoadConfig()
+	if err != nil {
+		t.Fatalf("LoadConfig gagal: %v", err)
+	}
+
+	if cfg.AppPort != "3000" {
+		t.Errorf("Expected port 3000 from PORT env var, got %s", cfg.AppPort)
 	}
 }
 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DompetKu </title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <a href="/" class="brand">
+      <span>DompetKu</span>
+    </a>
+    <div class="nav-user">
+      <span id="userGreeting" class="user-badge">Memuat...</span>
+      <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div id="pageAlert" class="alert" role="alert"></div>
+
+    <div class="dashboard-header">
+      <h1>Catatan Pengeluaran</h1>
+      <p>Kelola dan pantau keuangan harian Anda dengan mudah.</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <section class="summary-grid">
+      <div class="summary-card highlight">
+        <div class="summary-title">Total Pengeluaran</div>
+        <div id="totalAmountText" class="summary-value">Rp 0</div>
+        <div class="summary-subtitle">Akumulasi seluruh pengeluaran</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Jumlah Catatan</div>
+        <div id="totalCountText" class="summary-value">0</div>
+        <div class="summary-subtitle">Total transaksi tercatat</div>
+      </div>
+    </section>
+
+    <!-- Toolbar: Search, Filter, & Tambah Button -->
+    <section class="toolbar-card">
+      <div class="filter-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Cari nama pengeluaran...">
+        <select id="categoryFilter" class="form-control">
+          <option value="Semua">Semua Kategori</option>
+          <option value="Makanan">Makanan</option>
+          <option value="Transportasi">Transportasi</option>
+          <option value="Belanja">Belanja</option>
+          <option value="Tagihan">Tagihan</option>
+          <option value="Hiburan">Hiburan</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      <button id="openModalBtn" class="btn btn-primary" style="width: auto;">+ Tambah Pengeluaran</button>
+    </section>
+
+    <!-- Table of Expenses -->
+    <section class="table-card">
+      <div class="table-header">
+        <h2>Riwayat Pengeluaran</h2>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nama Pengeluaran</th>
+              <th>Kategori</th>
+              <th>Nominal</th>
+              <th style="text-align: right;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTableBody">
+            <tr>
+              <td colspan="5" class="empty-state">Memuat data transaksi...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Tambah / Edit Pengeluaran -->
+  <div id="expenseModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Tambah Pengeluaran</h3>
+        <button id="closeModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <div id="modalAlert" class="alert alert-danger" role="alert"></div>
+
+      <form id="expenseForm">
+        <input type="hidden" id="expenseId">
+
+        <div class="form-group">
+          <label for="expenseTitle">Nama Pengeluaran</label>
+          <input type="text" id="expenseTitle" class="form-control" placeholder="Contoh: Nasi Goreng, Bensin Motor" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseAmount">Nominal (Rp)</label>
+          <input type="number" id="expenseAmount" class="form-control" placeholder="Contoh: 25000" min="1" step="any" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseDate">Tanggal</label>
+          <input type="date" id="expenseDate" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseCategory">Kategori</label>
+          <select id="expenseCategory" class="form-control" required>
+            <option value="Makanan">Makanan</option>
+            <option value="Transportasi">Transportasi</option>
+            <option value="Belanja">Belanja</option>
+            <option value="Tagihan">Tagihan</option>
+            <option value="Hiburan">Hiburan</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <!-- Input dinamis jika memilih 'Lainnya' -->
+        <div class="form-group" id="customCategoryGroup" style="display: none;">
+          <label for="customCategory">Tuliskan Kategori Khusus</label>
+          <input type="text" id="customCategory" class="form-control" placeholder="Contoh: Donasi, Sedekah, Obat">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelModalBtn" class="btn" style="background-color: #f1f5f9; color: #334155;">Batal</button>
+          <button type="submit" id="saveExpenseBtn" class="btn btn-primary" style="width: auto;">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

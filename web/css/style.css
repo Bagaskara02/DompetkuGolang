@@ -1,0 +1,700 @@
+/* ==========================================================================
+   DOMPETKU — STYLESHEET (POPPINS FONT & ULTRA RESPONSIVE DESIGN)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset & CSS Variables */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-light: #ccfbf1;
+  --bg-main: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Ensure inputs, buttons, and selects always inherit Poppins */
+input, button, select, textarea {
+  font-family: 'Poppins', inherit;
+  font-size: 1rem; /* 16px prevents iOS Safari auto-zoom on focus */
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 28px) clamp(12px, 3vw, 20px);
+  flex: 1;
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: clamp(10px, 2.5vw, 16px) clamp(14px, 4vw, 28px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand span {
+  color: var(--text-main);
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 14px);
+  flex-shrink: 0;
+}
+
+.user-badge {
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  font-weight: 500;
+  color: var(--text-muted);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  background-color: transparent;
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+  padding: 6px clamp(10px, 2vw, 14px);
+  border-radius: var(--radius-sm);
+  font-size: clamp(0.75rem, 2.2vw, 0.85rem);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout:hover {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+/* Auth Pages (Login & Register) */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 32px);
+  background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+}
+
+.auth-card {
+  background-color: var(--card-bg);
+  padding: clamp(24px, 6vw, 40px) clamp(18px, 5vw, 32px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid var(--border-color);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-header h1 {
+  font-size: clamp(1.5rem, 5vw, 1.85rem);
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 44px; /* Touch target standar mobile */
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  font-size: 0.95rem;
+  min-height: 44px; /* Nyaman untuk sentuhan jari di smartphone */
+  touch-action: manipulation;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+  width: 100%;
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background-color: var(--primary-hover);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.825rem;
+  min-height: 34px;
+  border-radius: 6px;
+}
+
+.btn-edit {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.btn-edit:hover, .btn-edit:active {
+  background-color: #bae6fd;
+}
+
+.btn-delete {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-delete:hover, .btn-delete:active {
+  background-color: #fecaca;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.dashboard-header p {
+  color: var(--text-muted);
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+}
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(12px, 2.5vw, 18px);
+  margin-bottom: 22px;
+}
+
+.summary-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: clamp(16px, 3vw, 22px);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.summary-card.highlight {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #fff;
+  border: none;
+}
+
+.summary-card.highlight .summary-title,
+.summary-card.highlight .summary-subtitle {
+  color: #ccfbf1;
+}
+
+.summary-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.summary-value {
+  font-size: clamp(1.45rem, 4.5vw, 1.95rem);
+  font-weight: 700;
+  word-break: break-word;
+  line-height: 1.25;
+}
+
+.summary-subtitle {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Toolbar & Filters */
+.toolbar-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: clamp(14px, 2.5vw, 18px);
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.filter-group input,
+.filter-group select {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Expenses Table / Card List */
+.table-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-header h2 {
+  font-size: clamp(1.05rem, 3vw, 1.2rem);
+  font-weight: 600;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background-color: #f8fafc;
+  padding: 12px 18px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.925rem;
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+.amount-text {
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.775rem;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--text-muted);
+}
+
+.empty-state svg {
+  margin-bottom: 12px;
+  stroke: #94a3b8;
+}
+
+/* Alerts / Notification */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.alert-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.alert-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* Modal Dialog */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 14px;
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: clamp(20px, 5vw, 28px);
+  box-shadow: var(--shadow-lg);
+  animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-header h3 {
+  font-size: clamp(1.15rem, 3.5vw, 1.3rem);
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  line-height: 1;
+  padding: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* ==========================================================================
+   MOBILE & RESPONSIVE BREAKPOINTS (SMARTPHONE DI SEGALA RESOLUSI)
+   ========================================================================== */
+
+/* Tablet & Ponsel (< 768px) */
+@media (max-width: 768px) {
+  .toolbar-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-group {
+    width: 100%;
+    min-width: 100%;
+  }
+  .toolbar-card #openModalBtn {
+    width: 100%;
+  }
+}
+
+/* Smartphone Layar Kecil & Sedang (< 640px): Transform Tabel Jadi Kartu Elegan */
+@media (max-width: 640px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Ubah Tabel menjadi tampilan Kartu (Mobile Card Layout) */
+  .table-responsive {
+    overflow: visible;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    /* Sembunyikan header tabel konvensional secara aman */
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr.expense-row {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin: 12px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 
+      "date category"
+      "title title"
+      "amount amount"
+      "actions actions";
+    row-gap: 6px;
+    column-gap: 8px;
+    align-items: center;
+  }
+
+  tr.expense-row td {
+    padding: 0;
+    border: none;
+    background: transparent !important;
+  }
+
+  tr.expense-row .cell-date {
+    grid-area: date;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  tr.expense-row .cell-category {
+    grid-area: category;
+    text-align: right;
+  }
+
+  tr.expense-row .cell-title {
+    grid-area: title;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-top: 4px;
+    word-break: break-word;
+  }
+
+  tr.expense-row .cell-amount {
+    grid-area: amount;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--danger);
+    margin: 4px 0 8px 0;
+  }
+
+  tr.expense-row .cell-actions {
+    grid-area: actions;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+  }
+
+  tr.expense-row .action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  tr.expense-row .action-buttons .btn {
+    width: 100%;
+    min-height: 38px;
+    font-size: 0.875rem;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Smartphone Sangat Mungil (< 360px: misal Galaxy Fold cover 280-320px) */
+@media (max-width: 360px) {
+  .navbar {
+    padding: 10px 12px;
+  }
+  .brand {
+    font-size: 1rem;
+  }
+  .user-badge {
+    display: none; /* Sembunyikan greeting demi menghemat ruang di layar ultra sempit */
+  }
+  .summary-value {
+    font-size: 1.35rem;
+  }
+  .auth-card {
+    padding: 20px 14px;
+  }
+}

@@ -7,33 +7,33 @@
 ## 1. Informasi Aplikasi
 
 **Nama aplikasi:**  
-`[Isi nama aplikasi]`
+`DompetKu — Pencatat Pengeluaran Harian`
 
 **Deskripsi aplikasi:**  
-`[Jelaskan tujuan aplikasi dalam 1–3 kalimat]`
+`Aplikasi web sederhana untuk membantu pengguna mencatat dan memantau pengeluaran keuangan harian mereka. Pengguna dapat menambahkan riwayat transaksi, melihat total pengeluaran, serta mengelola catatan keuangan pribadi dengan mudah dan cepat.`
 
 **Target pengguna:**  
-`[Siapa yang akan menggunakan aplikasi?]`
+`Mahasiswa, pekerja, atau masyarakat umum yang ingin mencatat pengeluaran harian secara praktis tanpa fitur akuntansi yang rumit.`
 
 **Masalah yang ingin diselesaikan:**  
-`[Jelaskan masalah yang ingin diselesaikan oleh aplikasi]`
+`Banyak orang sering lupa ke mana uang mereka habis karena malas menggunakan aplikasi keuangan yang terlalu kompleks, sehingga membutuhkan tempat pencatatan pengeluaran yang cepat, simpel, dan langsung ke intinya.`
 
 ## 2. Kebutuhan Aplikasi
 
 Fitur utama aplikasi:
 
-1. `[Fitur utama 1]`
-2. `[Fitur utama 2]`
-3. `[Fitur utama 3]`
-4. `[Fitur tambahan, jika ada]`
+1. `Autentikasi pengguna (Registrasi akun baru, Login, dan Logout)`
+2. `CRUD Catatan Pengeluaran (Menambah, melihat daftar, mengedit, dan menghapus data pengeluaran berupa nama pengeluaran, nominal, kategori, dan tanggal)`
+3. `Ringkasan Total Pengeluaran (Menampilkan jumlah total nominal pengeluaran secara otomatis di halaman utama)`
+4. `Pencarian & Filter Kategori (Mencari catatan pengeluaran berdasarkan nama atau memfilter berdasarkan kategori seperti Makanan, Transportasi, dan Lainnya)`
 
 **Halaman aplikasi:**
 
 - Login
 - Register
-- Main Page — My Notes
+- Main Page — My Expenses (Halaman Utama Catatan Pengeluaran)
 
-Pada Main Page, pengguna dapat melihat daftar catatan, membuat catatan, mengedit, menghapus, dan logout.
+Pada Main Page, pengguna dapat melihat ringkasan total pengeluaran, daftar catatan pengeluaran, menambah catatan baru, mengedit, menghapus, dan logout.
 
 ## 3. Pilihan Teknologi
 
@@ -42,28 +42,28 @@ Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuha
 ### A. Backend Framework
 
 - [ ] 1. Go Standard Library (`net/http`)
-- [ ] 2. Gin
+- [x] 2. Gin
 - [ ] 3. Lainnya sebutkan
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** `2`
 
 ### B. ORM (Object-Relational Mapping)
 
 - [ ] 1. Tidak menggunakan ORM (SQL manual)
-- [ ] 2. GORM
+- [x] 2. GORM
 - [ ] 3. Lainnya sebutkan
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** `2`
 
-**Ketentuan:** `[Isi ketentuannya contoh memakai GORM atau menggunakan  SQL manual dengan library pgx]`
+**Ketentuan:** `Menggunakan GORM`
 
 ### C. Database
 
-- [ ] 1. PostgreSQL
+- [x] 1. PostgreSQL
 - [ ] 2. MySQL
 - [ ] 3. SQLite
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** `1`
 
 ### D. Frontend
 
@@ -71,26 +71,26 @@ Pilih satu opsi untuk setiap komponen yang diperlukan. Sesuaikan dengan kebutuha
 - [ ] 2. React
 - [ ] 3. Vue
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** `1`
 
 ### E. Sistem Autentikasi
 
 - [ ] 1. Session
 - [x] 2. JWT
 
-**Pilihan saya:** `[Isi nomor pilihan]`
+**Pilihan saya:** `1`
 
-**Ketentuan:** `[Isi ketentuan untuk Auth. contoh: Gunakan session berbasis server untuk mengelola status login pengguna atau Gunakan JWT berbasis server untuk mengelola status login pengguna.]`
+**Ketentuan:** `Gunakan JWT berbasis server untuk mengelola status login pengguna.`
 
 ### F. Penyimpanan Sesi atau Token
 
-- [ ] 1. Cookie
-- [x] 2. localStorage
+- [x] 1. Cookie
+- [ ] 2. localStorage
 - [ ] 3. Tidak diperlukan
 
 **Pilihan saya:** 1
 
-**Ketentuan:** Simpan ID session dalam localStorage dengan pengaturan keamanan yang sesuai.
+**Ketentuan:** Simpan ID session dalam Cookie dengan pengaturan keamanan yang sesuai.
 
 ### G. API
 
@@ -152,32 +152,34 @@ SESSION_SECRET=replace-with-a-random-secret
 
 ## 6. Batasan Pengembangan (BOLEH DIUBAH SESUAI KEINGINAN PESERTA PELATIHAN)
 
-- [ ] Struktur folder sederhana.
-- [ ] Kode mudah dipahami pemula.
-- [ ] Tidak menambahkan teknologi di luar pilihan tanpa persetujuan.
-- [ ] Memisahkan frontend dan backend.
-- [ ] Menggunakan environment variable untuk konfigurasi.
-- [ ] Membuat pengujian dasar.
-- [ ] Menjelaskan kode dan perubahan yang dibuat AI.
+- [X] Struktur folder sederhana.
+- [X] Kode mudah dipahami pemula.
+- [X] Tidak menambahkan teknologi di luar pilihan tanpa persetujuan.
+- [X] Memisahkan frontend dan backend.
+- [X] Menggunakan environment variable untuk konfigurasi.
+- [X] Membuat pengujian dasar.
+- [X] Menjelaskan kode dan perubahan yang dibuat AI.
 
 **Batasan tambahan:**
-`[Isi jika ada]`
+`Desain antarmuka (UI) dibuat bersih, minimalis, dan responsif hanya menggunakan CSS murni tanpa framework CSS berat agar mudah dipelajari.`
 
 ## 6. Fitur yang Tidak Dibutuhkan
 
 Tuliskan fitur yang tidak perlu dibuat agar ruang lingkup proyek tetap jelas.
 
-- `[Fitur yang tidak dibutuhkan 1]`
-- `[Fitur yang tidak dibutuhkan 2]`
+- `Grafik atau chart visualisasi statistik keuangan yang kompleks.`
+- `Fitur ekspor laporan ke PDF, Excel, atau CSV.`
+- `Manajemen multi-mata uang, koneksi rekening bank, atau pengingat tagihan otomatis.`
+- `Fitur lupa password via email (reset password) atau verifikasi OTP.`
 
 ## 7. Pemeriksaan Sebelum Vibe Coding (BOLEH DIUBAH SESUAI KEINGINAN PESERTA PELATIHAN)
 
-- [ ] Nama dan tujuan aplikasi sudah jelas.
-- [ ] Fitur utama sudah ditentukan.
-- [ ] Pilihan teknologi sudah diisi.
-- [ ] Kebutuhan autentikasi sudah ditentukan.
-- [ ] Batasan proyek sudah ditentukan.
-- [ ] Penggunaan `.env` dan `DATABASE_URL` sudah ditentukan.
+- [X] Nama dan tujuan aplikasi sudah jelas.
+- [X] Fitur utama sudah ditentukan.
+- [X] Pilihan teknologi sudah diisi.
+- [X] Kebutuhan autentikasi sudah ditentukan.
+- [X] Batasan proyek sudah ditentukan.
+- [X] Penggunaan `.env` dan `DATABASE_URL` sudah ditentukan.
 
 **Status spesifikasi:** Siap untuk diperiksa dan disetujui sebelum implementasi.
 

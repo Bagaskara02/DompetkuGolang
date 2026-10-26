@@ -200,6 +200,51 @@ input, button, select, textarea {
   box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 
+/* Password Input Group with Toggle Visibility Button */
+.password-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-input-group .form-control {
+  padding-right: 46px; /* Memberi ruang untuk icon toggle */
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s, background-color 0.2s;
+  min-height: auto;
+}
+
+.btn-toggle-password:hover {
+  color: var(--primary);
+  background-color: #f1f5f9;
+}
+
+.btn-toggle-password:focus-visible {
+  outline: 2px solid var(--primary);
+}
+
+.btn-toggle-password svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

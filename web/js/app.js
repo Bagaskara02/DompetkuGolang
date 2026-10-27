@@ -18,6 +18,18 @@ function formatRupiah(amount) {
   return isNegative ? `-${formatted}` : formatted;
 }
 
+// Menyesuaikan ukuran font secara otomatis jika angka mencapai miliaran agar tidak terpotong
+function setSummaryValue(elementId, formattedText) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.textContent = formattedText;
+  if (formattedText.length > 15) {
+    el.style.fontSize = 'clamp(1.1rem, 1.8vw, 1.35rem)';
+  } else {
+    el.style.fontSize = '';
+  }
+}
+
 // Helper Format Tanggal (YYYY-MM-DD menjadi format tanggal terbaca)
 function formatDate(dateStr) {
   if (!dateStr) return '-';
@@ -158,8 +170,15 @@ async function loadExpenses() {
       const totalCount = summaryData.total_count || 0;
 
       const balanceCard = document.getElementById('balanceCard');
-      const balanceText = document.getElementById('balanceText');
-      balanceText.textContent = formatRupiah(balance);
+      const balanceBadge = document.getElementById('balanceBadge');
+      
+      setSummaryValue('balanceText', formatRupiah(balance));
+      setSummaryValue('totalIncomeText', formatRupiah(totalIncome));
+      setSummaryValue('totalExpenseText', formatRupiah(totalExpense));
+
+      if (balanceBadge) {
+        balanceBadge.textContent = balance < 0 ? 'Defisit' : 'Surplus';
+      }
 
       if (balance < 0) {
         balanceCard.classList.add('negative');
@@ -167,9 +186,10 @@ async function loadExpenses() {
         balanceCard.classList.remove('negative');
       }
 
-      document.getElementById('totalIncomeText').textContent = formatRupiah(totalIncome);
-      document.getElementById('totalExpenseText').textContent = formatRupiah(totalExpense);
-      document.getElementById('totalCountText').textContent = `${totalCount} transaksi`;
+      const totalCountBadge = document.getElementById('totalCountBadge');
+      if (totalCountBadge) {
+        totalCountBadge.textContent = `${totalCount} transaksi`;
+      }
     }
 
     // 2. Ambil daftar transaksi

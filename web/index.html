@@ -7,13 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css?v=1.4">
+  <link rel="stylesheet" href="/css/style.css?v=2.0">
 </head>
 <body>
   <!-- Navbar -->
   <header class="navbar">
     <a href="/" class="brand">
-      💰 <span>DompetKu</span>
+      <span>DompetKu</span>
     </a>
     <div class="nav-user">
       <span id="userGreeting" class="user-badge">Memuat...</span>
@@ -27,30 +27,37 @@
 
     <div class="dashboard-header">
       <h1>Catatan Keuangan</h1>
-      <p>Kelola dan pantau pemasukan, pengeluaran, dan saldo Anda.</p>
+      <p>Pantau dan kelola arus kas pribadi Anda dengan akurat.</p>
     </div>
 
-    <!-- Summary Cards -->
+    <!-- Summary Cards (Grid Luas & Responsif Tanpa Wrap Angka) -->
     <section class="summary-grid">
       <div class="summary-card highlight" id="balanceCard">
-        <div class="summary-title">Sisa Saldo</div>
+        <div class="summary-header">
+          <span class="summary-title">Sisa Saldo</span>
+        </div>
         <div id="balanceText" class="summary-value">Rp 0</div>
-        <div class="summary-subtitle">Total Pemasukan - Pengeluaran</div>
+        <div class="summary-subtitle">Total pemasukan dikurangi pengeluaran</div>
       </div>
       <div class="summary-card card-income">
-        <div class="summary-title" style="color: #059669;">Total Pemasukan</div>
-        <div id="totalIncomeText" class="summary-value" style="color: #059669;">Rp 0</div>
-        <div class="summary-subtitle">Seluruh dana masuk</div>
+        <div class="summary-header">
+          <span class="summary-title">Total Pemasukan</span>
+          <span class="metric-indicator income">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          </span>
+        </div>
+        <div id="totalIncomeText" class="summary-value text-income">Rp 0</div>
+        <div class="summary-subtitle">Akumulasi seluruh dana masuk</div>
       </div>
       <div class="summary-card card-expense">
-        <div class="summary-title" style="color: #dc2626;">Total Pengeluaran</div>
-        <div id="totalExpenseText" class="summary-value" style="color: #dc2626;">Rp 0</div>
-        <div class="summary-subtitle">Seluruh pengeluaran</div>
-      </div>
-      <div class="summary-card">
-        <div class="summary-title">Total Transaksi</div>
-        <div id="totalCountText" class="summary-value">0</div>
-        <div class="summary-subtitle">Transaksi tercatat</div>
+        <div class="summary-header">
+          <span class="summary-title">Total Pengeluaran</span>
+          <span class="metric-indicator expense">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <div id="totalExpenseText" class="summary-value text-expense">Rp 0</div>
+        <div class="summary-subtitle">Akumulasi seluruh pengeluaran</div>
       </div>
     </section>
 
@@ -60,20 +67,24 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Cari nama transaksi...">
         <select id="typeFilter" class="form-control" style="max-width: 170px;">
           <option value="Semua">Semua Tipe</option>
-          <option value="pemasukan">Pemasukan (+)</option>
-          <option value="pengeluaran">Pengeluaran (-)</option>
+          <option value="pemasukan">Pemasukan</option>
+          <option value="pengeluaran">Pengeluaran</option>
         </select>
         <select id="categoryFilter" class="form-control">
           <option value="Semua">Semua Kategori</option>
         </select>
       </div>
-      <button id="openModalBtn" class="btn btn-primary" style="width: auto;">+ Tambah Transaksi</button>
+      <button id="openModalBtn" class="btn btn-primary" style="width: auto; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Transaksi
+      </button>
     </section>
 
-    <!-- Table of Expenses -->
+    <!-- Table of Transactions -->
     <section class="table-card">
       <div class="table-header">
         <h2>Riwayat Transaksi</h2>
+        <span id="totalCountBadge" class="table-count-badge">0 transaksi</span>
       </div>
       <div class="table-responsive">
         <table>
@@ -111,13 +122,15 @@
         <input type="hidden" id="expenseId">
         <input type="hidden" id="expenseType" value="pengeluaran">
 
-        <!-- Switcher Pilihan Jenis: Pengeluaran / Pemasukan -->
+        <!-- Segmented Control Jenis Transaksi -->
         <div class="type-toggle-group">
           <button type="button" class="type-toggle-btn active expense" id="typeExpenseBtn">
-            🔻 Pengeluaran
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            Pengeluaran
           </button>
           <button type="button" class="type-toggle-btn income" id="typeIncomeBtn">
-            🔺 Pemasukan
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            Pemasukan
           </button>
         </div>
 
@@ -157,6 +170,6 @@
     </div>
   </div>
 
-  <script src="/js/app.js?v=1.4"></script>
+  <script src="/js/app.js?v=2.0"></script>
 </body>
 </html>

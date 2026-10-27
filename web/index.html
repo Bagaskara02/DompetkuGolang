@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DompetKu </title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>DompetKu — Catatan Keuangan Pribadi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=1.4">
 </head>
 <body>
   <!-- Navbar -->
   <header class="navbar">
     <a href="/" class="brand">
-      <span>DompetKu</span>
+      💰 <span>DompetKu</span>
     </a>
     <div class="nav-user">
       <span id="userGreeting" class="user-badge">Memuat...</span>
@@ -23,52 +26,62 @@
     <div id="pageAlert" class="alert" role="alert"></div>
 
     <div class="dashboard-header">
-      <h1>Catatan Pengeluaran</h1>
-      <p>Kelola dan pantau keuangan harian Anda dengan mudah.</p>
+      <h1>Catatan Keuangan</h1>
+      <p>Kelola dan pantau pemasukan, pengeluaran, dan saldo Anda.</p>
     </div>
 
     <!-- Summary Cards -->
     <section class="summary-grid">
-      <div class="summary-card highlight">
-        <div class="summary-title">Total Pengeluaran</div>
-        <div id="totalAmountText" class="summary-value">Rp 0</div>
-        <div class="summary-subtitle">Akumulasi seluruh pengeluaran</div>
+      <div class="summary-card highlight" id="balanceCard">
+        <div class="summary-title">Sisa Saldo</div>
+        <div id="balanceText" class="summary-value">Rp 0</div>
+        <div class="summary-subtitle">Total Pemasukan - Pengeluaran</div>
+      </div>
+      <div class="summary-card card-income">
+        <div class="summary-title" style="color: #059669;">Total Pemasukan</div>
+        <div id="totalIncomeText" class="summary-value" style="color: #059669;">Rp 0</div>
+        <div class="summary-subtitle">Seluruh dana masuk</div>
+      </div>
+      <div class="summary-card card-expense">
+        <div class="summary-title" style="color: #dc2626;">Total Pengeluaran</div>
+        <div id="totalExpenseText" class="summary-value" style="color: #dc2626;">Rp 0</div>
+        <div class="summary-subtitle">Seluruh pengeluaran</div>
       </div>
       <div class="summary-card">
-        <div class="summary-title">Jumlah Catatan</div>
+        <div class="summary-title">Total Transaksi</div>
         <div id="totalCountText" class="summary-value">0</div>
-        <div class="summary-subtitle">Total transaksi tercatat</div>
+        <div class="summary-subtitle">Transaksi tercatat</div>
       </div>
     </section>
 
     <!-- Toolbar: Search, Filter, & Tambah Button -->
     <section class="toolbar-card">
       <div class="filter-group">
-        <input type="text" id="searchInput" class="form-control" placeholder="Cari nama pengeluaran...">
+        <input type="text" id="searchInput" class="form-control" placeholder="Cari nama transaksi...">
+        <select id="typeFilter" class="form-control" style="max-width: 170px;">
+          <option value="Semua">Semua Tipe</option>
+          <option value="pemasukan">Pemasukan (+)</option>
+          <option value="pengeluaran">Pengeluaran (-)</option>
+        </select>
         <select id="categoryFilter" class="form-control">
           <option value="Semua">Semua Kategori</option>
-          <option value="Makanan">Makanan</option>
-          <option value="Transportasi">Transportasi</option>
-          <option value="Belanja">Belanja</option>
-          <option value="Tagihan">Tagihan</option>
-          <option value="Hiburan">Hiburan</option>
-          <option value="Lainnya">Lainnya</option>
         </select>
       </div>
-      <button id="openModalBtn" class="btn btn-primary" style="width: auto;">+ Tambah Pengeluaran</button>
+      <button id="openModalBtn" class="btn btn-primary" style="width: auto;">+ Tambah Transaksi</button>
     </section>
 
     <!-- Table of Expenses -->
     <section class="table-card">
       <div class="table-header">
-        <h2>Riwayat Pengeluaran</h2>
+        <h2>Riwayat Transaksi</h2>
       </div>
       <div class="table-responsive">
         <table>
           <thead>
             <tr>
               <th>Tanggal</th>
-              <th>Nama Pengeluaran</th>
+              <th>Nama Transaksi</th>
+              <th>Tipe</th>
               <th>Kategori</th>
               <th>Nominal</th>
               <th style="text-align: right;">Aksi</th>
@@ -76,7 +89,7 @@
           </thead>
           <tbody id="expenseTableBody">
             <tr>
-              <td colspan="5" class="empty-state">Memuat data transaksi...</td>
+              <td colspan="6" class="empty-state">Memuat data transaksi...</td>
             </tr>
           </tbody>
         </table>
@@ -84,11 +97,11 @@
     </section>
   </main>
 
-  <!-- Modal Tambah / Edit Pengeluaran -->
+  <!-- Modal Tambah / Edit Pengeluaran / Pemasukan -->
   <div id="expenseModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 id="modalTitle">Tambah Pengeluaran</h3>
+        <h3 id="modalTitle">Tambah Transaksi</h3>
         <button id="closeModalBtn" class="modal-close">&times;</button>
       </div>
 
@@ -96,15 +109,26 @@
 
       <form id="expenseForm">
         <input type="hidden" id="expenseId">
+        <input type="hidden" id="expenseType" value="pengeluaran">
+
+        <!-- Switcher Pilihan Jenis: Pengeluaran / Pemasukan -->
+        <div class="type-toggle-group">
+          <button type="button" class="type-toggle-btn active expense" id="typeExpenseBtn">
+            🔻 Pengeluaran
+          </button>
+          <button type="button" class="type-toggle-btn income" id="typeIncomeBtn">
+            🔺 Pemasukan
+          </button>
+        </div>
 
         <div class="form-group">
-          <label for="expenseTitle">Nama Pengeluaran</label>
-          <input type="text" id="expenseTitle" class="form-control" placeholder="Contoh: Nasi Goreng, Bensin Motor" required>
+          <label for="expenseTitle">Nama Transaksi</label>
+          <input type="text" id="expenseTitle" class="form-control" placeholder="Contoh: Nasi Goreng, Gaji Bulanan" required>
         </div>
 
         <div class="form-group">
           <label for="expenseAmount">Nominal (Rp)</label>
-          <input type="number" id="expenseAmount" class="form-control" placeholder="Contoh: 25000" min="1" step="any" required>
+          <input type="number" id="expenseAmount" class="form-control" placeholder="Contoh: 50000" min="1" step="any" required>
         </div>
 
         <div class="form-group">
@@ -115,19 +139,14 @@
         <div class="form-group">
           <label for="expenseCategory">Kategori</label>
           <select id="expenseCategory" class="form-control" required>
-            <option value="Makanan">Makanan</option>
-            <option value="Transportasi">Transportasi</option>
-            <option value="Belanja">Belanja</option>
-            <option value="Tagihan">Tagihan</option>
-            <option value="Hiburan">Hiburan</option>
-            <option value="Lainnya">Lainnya</option>
+            <!-- Diisi secara dinamis sesuai tipe -->
           </select>
         </div>
 
         <!-- Input dinamis jika memilih 'Lainnya' -->
         <div class="form-group" id="customCategoryGroup" style="display: none;">
           <label for="customCategory">Tuliskan Kategori Khusus</label>
-          <input type="text" id="customCategory" class="form-control" placeholder="Contoh: Donasi, Sedekah, Obat">
+          <input type="text" id="customCategory" class="form-control" placeholder="Contoh: Donasi, Sedekah, Hibah">
         </div>
 
         <div class="modal-actions">
@@ -138,6 +157,6 @@
     </div>
   </div>
 
-  <script src="/js/app.js"></script>
+  <script src="/js/app.js?v=1.4"></script>
 </body>
 </html>

@@ -32,8 +32,8 @@ func getUserID(c *gin.Context) (uint, bool) {
 	return userID, ok
 }
 
-// GetExpenses mengambil seluruh daftar pengeluaran milik user yang sedang login
-// Mendukung filter query: ?search=xxx & category=xxx
+// GetExpenses mengambil seluruh daftar transaksi milik user yang sedang login
+// Mendukung filter query: ?search=xxx & category=xxx & type=xxx (pemasukan/pengeluaran)
 func (h *ExpenseHandler) GetExpenses(c *gin.Context) {
 	userID, ok := getUserID(c)
 	if !ok {
@@ -43,6 +43,7 @@ func (h *ExpenseHandler) GetExpenses(c *gin.Context) {
 
 	search := strings.TrimSpace(c.Query("search"))
 	category := strings.TrimSpace(c.Query("category"))
+	txType := strings.TrimSpace(strings.ToLower(c.Query("type")))
 
 	query := h.db.Where("user_id = ?", userID)
 
@@ -54,9 +55,13 @@ func (h *ExpenseHandler) GetExpenses(c *gin.Context) {
 		query = query.Where("category = ?", category)
 	}
 
+	if txType != "" && txType != "semua" {
+		query = query.Where("type = ?", txType)
+	}
+
 	var expenses []models.Expense
 	if err := query.Order("date DESC, id DESC").Find(&expenses).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil data pengeluaran."})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil data transaksi."})
 		return
 	}
 
@@ -65,7 +70,7 @@ func (h *ExpenseHandler) GetExpenses(c *gin.Context) {
 	})
 }
 
-// GetSummary menghitung ringkasan total nominal dan jumlah catatan pengeluaran user
+// GetSummary menghitung ringkasan total pemasukan, total pengeluaran, saldo, dan jumlah transaksi
 func (h *ExpenseHandler) GetSummary(c *gin.Context) {
 	userID, ok := getUserID(c)
 	if !ok {
@@ -86,18 +91,31 @@ func (h *ExpenseHandler) GetSummary(c *gin.Context) {
 		query = query.Where("category = ?", category)
 	}
 
-	var totalCount int64
-	query.Count(&totalCount)
-
-	type SumResult struct {
-		Total float64
+	type SummaryResult struct {
+		TotalIncome  float64 `gorm:"column:total_income"`
+		TotalExpense float64 `gorm:"column:total_expense"`
+		TotalCount   int64   `gorm:"column:total_count"`
 	}
-	var sumResult SumResult
-	query.Select("COALESCE(SUM(amount), 0) as total").Scan(&sumResult)
+
+	var res SummaryResult
+	err := query.Select(`
+		COALESCE(SUM(CASE WHEN type = 'pemasukan' THEN amount ELSE 0 END), 0) as total_income,
+		COALESCE(SUM(CASE WHEN type != 'pemasukan' THEN amount ELSE 0 END), 0) as total_expense,
+		COUNT(*) as total_count
+	`).Scan(&res).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menghitung ringkasan saldo."})
+		return
+	}
+
+	balance := res.TotalIncome - res.TotalExpense
 
 	c.JSON(http.StatusOK, models.ExpenseSummary{
-		TotalAmount: sumResult.Total,
-		TotalCount:  totalCount,
+		TotalIncome:  res.TotalIncome,
+		TotalExpense: res.TotalExpense,
+		Balance:      balance,
+		TotalCount:   res.TotalCount,
 	})
 }
 
@@ -146,26 +164,32 @@ func (h *ExpenseHandler) CreateExpense(c *gin.Context) {
 		return
 	}
 
+	txType := strings.TrimSpace(strings.ToLower(input.Type))
+	if txType != "pemasukan" {
+		txType = "pengeluaran"
+	}
+
 	newExpense := models.Expense{
 		UserID:   userID,
 		Title:    strings.TrimSpace(input.Title),
 		Amount:   input.Amount,
+		Type:     txType,
 		Category: strings.TrimSpace(input.Category),
 		Date:     parsedDate,
 	}
 
 	if err := h.db.Create(&newExpense).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan pengeluaran."})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan transaksi."})
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "Catatan pengeluaran berhasil ditambahkan.",
+		"message": "Catatan transaksi berhasil ditambahkan.",
 		"expense": newExpense,
 	})
 }
 
-// UpdateExpense memperbarui data catatan pengeluaran
+// UpdateExpense memperbarui data catatan pengeluaran / pemasukan
 func (h *ExpenseHandler) UpdateExpense(c *gin.Context) {
 	userID, ok := getUserID(c)
 	if !ok {
@@ -176,14 +200,14 @@ func (h *ExpenseHandler) UpdateExpense(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.ParseUint(idParam, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "ID pengeluaran tidak valid."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID transaksi tidak valid."})
 		return
 	}
 
 	var expense models.Expense
 	// Pastikan data milik user yang sedang login
 	if err := h.db.Where("id = ? AND user_id = ?", uint(id), userID).First(&expense).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Catatan pengeluaran tidak ditemukan atau Anda tidak memiliki akses."})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Catatan transaksi tidak ditemukan atau Anda tidak memiliki akses."})
 		return
 	}
 
@@ -199,18 +223,25 @@ func (h *ExpenseHandler) UpdateExpense(c *gin.Context) {
 		return
 	}
 
+	if input.Type != "" {
+		txType := strings.TrimSpace(strings.ToLower(input.Type))
+		if txType == "pemasukan" || txType == "pengeluaran" {
+			expense.Type = txType
+		}
+	}
+
 	expense.Title = strings.TrimSpace(input.Title)
 	expense.Amount = input.Amount
 	expense.Category = strings.TrimSpace(input.Category)
 	expense.Date = parsedDate
 
 	if err := h.db.Save(&expense).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memperbarui catatan pengeluaran."})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memperbarui catatan transaksi."})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Catatan pengeluaran berhasil diperbarui.",
+		"message": "Catatan transaksi berhasil diperbarui.",
 		"expense": expense,
 	})
 }

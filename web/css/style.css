@@ -366,9 +366,26 @@ input, button, select, textarea {
   border: none;
 }
 
+.summary-card.highlight.negative {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+}
+
 .summary-card.highlight .summary-title,
 .summary-card.highlight .summary-subtitle {
   color: #ccfbf1;
+}
+
+.summary-card.highlight.negative .summary-title,
+.summary-card.highlight.negative .summary-subtitle {
+  color: #fecaca;
+}
+
+.summary-card.card-income {
+  border-left: 4px solid var(--success);
+}
+
+.summary-card.card-expense {
+  border-left: 4px solid var(--danger);
 }
 
 .summary-title {
@@ -483,8 +500,15 @@ tr:hover td {
 
 .amount-text {
   font-weight: 700;
-  color: var(--danger);
   white-space: nowrap;
+}
+
+.amount-income {
+  color: #059669;
+}
+
+.amount-expense {
+  color: #dc2626;
 }
 
 .category-tag {
@@ -496,6 +520,64 @@ tr:hover td {
   background-color: #f1f5f9;
   color: #334155;
   white-space: nowrap;
+}
+
+.badge-type {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-income {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-expense {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Type Toggle Buttons (Pill Switcher) in Modal */
+.type-toggle-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.type-toggle-btn {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.925rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.type-toggle-btn.active.expense {
+  background-color: var(--danger);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.type-toggle-btn.active.income {
+  background-color: var(--success);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
 }
 
 .action-buttons {
@@ -665,8 +747,8 @@ tr:hover td {
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-areas: 
-      "date category"
-      "title title"
+      "date type"
+      "title category"
       "amount amount"
       "actions actions";
     row-gap: 6px;
@@ -684,6 +766,11 @@ tr:hover td {
     grid-area: date;
     font-size: 0.8rem;
     color: var(--text-muted);
+  }
+
+  tr.expense-row .cell-type {
+    grid-area: type;
+    text-align: right;
   }
 
   tr.expense-row .cell-category {
